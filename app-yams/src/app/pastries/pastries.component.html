@@ -1,7 +1,7 @@
 <div class="row content">
   <nav class="navbar navbar-expand-lg navbar-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-            aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -17,27 +17,30 @@
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0 d-inline-flex">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0 m-4" type="submit">Search</button>
-      </form>
+      <app-search (searching)="search($event)"></app-search>
     </div>
   </nav>
+  <h1>{{ titlePage }}</h1>
+  <div class="text-center py-2">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
   <div class="col-sm-4">
     <!-- PastrieDetails communication parent vers enfant -->
-    <app-pastrie-details [pastrie]="selectedPastrie"></app-pastrie-details>
+    <app-pastrie-details [pastrie]="selectedPastrie" (changePreference)="changeParentPreference($event)">
+    </app-pastrie-details>
   </div>
   <!-- -->
   <div class="col-sm-8 pastrie">
-    <h1>{{ titlePage }}</h1>
     <!-- Pagination -->
-    <div class="card" *ngFor="let pastrie of pastries">
+    <div class="card card-selected" id="pastrie-{{pastrie.id}}"
+      *ngFor="let pastrie of pastries | paginate: {itemsPerPage: 5,currentPage: p, totalItems:pastries.length}"
+      (click)="onSelect(pastrie)">
       <div class="card-header">
         {{ pastrie.ref }}
       </div>
       <div class="card-body">
         <h5 class="card-title">{{pastrie.name}}</h5>
-<!--        <button (click)="onSelect(pastrie)" class="btn btn-primary"> Sélectionner </button>-->
+        <!--        <button (click)="onSelect(pastrie)" class="btn btn-primary"> Sélectionner </button>-->
         <p class="card-text">{{pastrie.description}}</p>
         <!-- condition qui vérifie si il y a des tags présents dans une pâtisserie. Si ce n'est pas le cas,
              la directive ne crée pas l'élément HTML dans le Component.
@@ -50,11 +53,11 @@
         <a class="btn btn-outline-dark" href="#" role="button">fr</a>
         <!-- permert de gérer un if plus complexe, voir doc Angular -->
         <ng-template [ngIf]="pastrie.like">
-          <img class="glyph-icon" src="./assets/svg/si-glyph-heart.svg" alt="like"/>
+          <img class="glyph-icon" src="./assets/svg/si-glyph-heart.svg" alt="like" />
           <small>{{ pastrie.like }}</small>
         </ng-template>
         <ng-template [ngIf]="pastrie.quantity">
-          <img class="glyph-icon" src="./assets/svg/si-glyph-triangle-double-arrow-right.svg" alt="disponibility"/>
+          <img class="glyph-icon" src="./assets/svg/si-glyph-triangle-double-arrow-right.svg" alt="disponibility" />
           <small>{{pastrie.quantity}} unités disponibles</small>
         </ng-template>
       </div>

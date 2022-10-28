@@ -1,13 +1,10 @@
-<div class="card" *ngIf="pastrie">
-  <img
-    *ngIf="pastrie.url"
-    class="card-img-top"
-    src="{{ pastrie.url }}"
-    alt="Pastrie Category"
-  />
+<div class="card" *ngIf="pastrie" id="detail-{{pastrie.id}}">
+  <img *ngIf="pastrie.url" class="card-img-top" src="{{ pastrie.url }}" alt="Pastrie Category" />
   <div class="card-body">
     <h5 class="card-title">{{ pastrie.ref }}</h5>
     <p class="card-text">Name: {{ pastrie.name }}</p>
+    <button class="btn btn-success choice" id="choice-{{pastrie.id}}" (click)="preference(pastrie.id)">Choice</button>
+    <span class="d-none" [id]="'priority-'+ pastrie.id ">[Priority]</span>
     <button class="btn btn-primary" (click)="modifyOrder()">
       {{ sens ? "Desc" : "Asc" }} >>
     </button>
